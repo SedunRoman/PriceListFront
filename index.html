@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EndProject</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="_css/style.css" />
+  </head>
+
+  <body>
+    <div class="common-global">
+      <div class="main-title">
+        <h1>Учет моих расходов</h1>
+      </div>
+      <div class="main-top">
+        <div class="main-top-string">
+          <span class="main-top-input-text">Куда было потрачено:</span>
+          <input type="text" id="add-string" placeholder="Куда было потрачено"/>
+        </div>
+        <div class="main-top-number">
+          <span class="main-top-input-text">Сколько было потрачено:</span>
+          <input type="number" id="add-number" placeholder="Сколько было потрачено" />
+        </div>
+        <div class="main-top-button">
+          <button type="button" onclick="onClickBtn()">Добавить</button>
+        </div>
+      </div>
+      <div class="main-middle">
+        Итого:
+        <span class="main-middle-result" id="end-result">0</span>
+        р.
+      </div>
+      <div class="main-bottom" id="content-page"></div>
+      <div class="result_clear_all" id="content-clear" style="display: none">
+        <button type="button" onclick="onClickBtnClear()">Clear all</button>
+      </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="_scripts/scripts.js"></script>
+  </body>
+</html>
