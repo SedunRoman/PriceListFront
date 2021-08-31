@@ -22,7 +22,7 @@ window.onload = async () => {
 const calculateSummCosts = () => {
   const redElem = allList.reduce((a, b) => a + b.number, 0);
   const redResult = document.getElementById('end-result');
-  redResult.innerText = `${+redElem}`; 
+  redResult.innerText = `${+redElem}`;
 }
 
 const onClickBtn = async () => {
@@ -39,7 +39,6 @@ const onClickBtn = async () => {
         date: valueDate
       })
     });
-
     const result = await resp.json();
     allList = result.data;
     localStorage.setItem('tasks', JSON.stringify(allList));
@@ -53,12 +52,15 @@ const onClickBtn = async () => {
     addNumber.style.border = "2px solid rgba(255, 0, 0, 0.4)";
   }
 };
+
 const updateAddString = (event) => {
   valueString = event.target.value;
 };
+
 const updateAddNumber = (event2) => {
   valueNumber = event2.target.value;
 };
+
 const render = async () => {
   const content = document.getElementById('content-page');
   while (content.firstChild) {
@@ -69,6 +71,7 @@ const render = async () => {
     content.style.display = "none";
     clearAll.style.display = "none";
   }
+
   allList.map((item, index) => {
     const container = document.createElement('div');
     container.id = `task-${index}`;
@@ -94,6 +97,7 @@ const render = async () => {
         </div>
       </div>
     `
+
     onClickEdit = async (index) => {
       onclicBtnEdit(index);
     };
@@ -108,53 +112,58 @@ const render = async () => {
   });
 };
 
+
+const clickEdit = async (index) => {
+  const title_add = document.getElementById(`add-title${index}`);
+  const price_add = document.getElementById(`add-price${index}`);
+  const addText = document.getElementById(`add-text${index}`);
+  const addNum = document.getElementById(`add-num${index}`);
+  addText.innerText = title_add.value;
+  addNum.innerText = price_add.value;
+
+  document.getElementById(`edit-block-${index}`).remove();
+  document.getElementById(`${index}`).style.display = 'block';
+  const resp = await fetch('http://localhost:8000/updateList', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Access-Control-Allow-Origin': '*'
+    },
+    body: JSON.stringify({
+      _id: allList[index]._id,
+      text: addText.innerText,
+      number: addNum.innerText
+    })
+  });
+  const result = await resp.json();
+  allList = result.data;
+  localStorage.setItem('tasks', JSON.stringify(allList));
+  render();
+};
+
 const onclicBtnEdit = async (index) => {
+  const { text, number } = allList[index];
   const container = document.querySelector(`#task-${index}`);
   const test_Edit = document.createElement('div');
+  test_Edit.id = `edit-block-${index}`;
+  const btEdit = document.getElementById(`${index}`);
   test_Edit.className = 'test_edit';
   test_Edit.innerHTML = `
-    <input type="text" class="title-add" id="add-title${index}" value='${allList[index].text}'/>
-    <input type="number" class="price-add" id="add-price${index}" value='${allList[index].number}'/>
-    <button type="button" class="btn-add" onclick="clickEdit()">Add</button>
-    <button type="button" class="btn-cancel" onclick="clickCancel()">Back</button>
-  `
-  clickEdit = async () => {
-    const title_add = document.getElementById(`add-title${index}`);
-    const price_add = document.getElementById(`add-price${index}`);
-    const addText = document.getElementById(`add-text${index}`);
-    const addNum = document.getElementById(`add-num${index}`);
-    addText.innerText = title_add.value;
-    addNum.innerText = price_add.value;
+    <input type="text" class="title-add" id="add-title${index}" value='${text}'/>
+    <input type="number" class="price-add" id="add-price${index}" value='${number}'/>
+    <button type="button" class="btn-add" onclick='clickEdit(${index})'>Add</button>
+    <button type="button" class="btn-cancel" onclick="clickCancel(${index})">Back</button>
+  `;
 
-    test_Edit.remove();
-    btEdit.style.display = 'block';
-    const resp = await fetch('http://localhost:8000/updateList', {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({
-        _id: allList[index]._id,
-        text: addText.innerText,
-        number: addNum.innerText
-      })
-    });
-    const result = await resp.json();
-    allList = result.data;
-    localStorage.setItem('tasks', JSON.stringify(allList));
-    render();
-  };
-
-  const btEdit = document.getElementById(`${index}`);
   btEdit.style.display = 'none';
 
-  clickCancel = () => {
-    test_Edit.remove();
-    btEdit.style.display = 'block';
-  }
   container.appendChild(test_Edit);
 };
+
+const clickCancel = (index) => {
+  document.getElementById(`edit-block-${index}`).remove();
+  document.getElementById(`${index}`).style.display = 'block';
+}
 
 const onclicBtnDel = async (index) => {
   const container = document.querySelector(`#task-${index}`);
